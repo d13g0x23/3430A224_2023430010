@@ -15,14 +15,27 @@ class Nodo {
     Nodo(int v) : valor(v), izquierdo(nullptr), derecho(nullptr), altura(1) {}
 };
 
+/*
+    Obtiene la altura de un nodo
+    Retorna la altura del nodo o 0 si es nulo
+*/
 int altura(Nodo* N) {
     return N == nullptr ? 0 : N->altura;
 }
 
+/*
+    Obtiene el factor de equilibrio (FE) de un nodo
+    Retorna el FE del nodo o 0 si es nulo
+*/
 int obtenerFactorEquilibrio(Nodo* N) {
     return N == nullptr ? 0 : altura(N->derecho) - altura(N->izquierdo);
 }
 
+/*
+    Rota hacia la derecha
+    El parametro "y" representa el nodo desbalanceado
+    Retorna el nuevo nodo raiz después de la rotación
+*/
 Nodo* rotacionDerecha(Nodo* y) {
     Nodo* x = y->izquierdo;
     Nodo* T2 = x->derecho;
@@ -36,6 +49,11 @@ Nodo* rotacionDerecha(Nodo* y) {
     return x;
 }
 
+/*
+    Rota hacia la izquierda
+    El parametro "x" representa el nodo desbalanceado
+    Retorna el nuevo nodo raiz después de la rotación
+*/
 Nodo* rotacionIzquierda(Nodo* x) {
     Nodo* y = x->derecho;
     Nodo* T2 = y->izquierdo;
@@ -49,6 +67,11 @@ Nodo* rotacionIzquierda(Nodo* x) {
     return y;
 }
 
+/*
+    Inserta un valor en el árbol
+    Retorna el nuevo nodo raiz del subárbol después de la inserción
+    Si el valor ya existe, muestra un mensaje y no lo inserta
+*/
 Nodo* insertar(Nodo* nodo, int valor) {
     if (nodo == nullptr) return new Nodo(valor);
 
@@ -83,6 +106,10 @@ Nodo* insertar(Nodo* nodo, int valor) {
     return nodo;
 }
 
+/*
+    Encuentra el nodo con el valor mínimo en un subárbol
+    Retorna el nodo con el valor mínimo
+*/
 Nodo* minValueNode(Nodo* nodo) {
     Nodo* actual = nodo;
     while (actual->izquierdo != nullptr)
@@ -90,6 +117,10 @@ Nodo* minValueNode(Nodo* nodo) {
     return actual;
 }
 
+/*
+    Elimina un nodo del árbol
+    Retorna el nuevo nodo raíz del subárbol después de la eliminación
+*/
 Nodo* eliminar(Nodo* raiz, int valor) {
     if (raiz == nullptr) return raiz;
 
@@ -120,6 +151,7 @@ Nodo* eliminar(Nodo* raiz, int valor) {
 
     int balance = obtenerFactorEquilibrio(raiz);
 
+    // Realiza las rotaciones necesarias para equilibrar el árbol
     if (balance < -1 && obtenerFactorEquilibrio(raiz->izquierdo) <= 0)
         return rotacionDerecha(raiz);
 
@@ -139,6 +171,9 @@ Nodo* eliminar(Nodo* raiz, int valor) {
     return raiz;
 }
 
+/*
+    Genera el grafo de la estructura del árbol en formato Graphviz
+*/
 void generarGrafo(Nodo* raiz, ofstream& archivo) {
     if (raiz != nullptr) {
         archivo << raiz->valor << "[label=\"" << raiz->valor << " (FE=" << obtenerFactorEquilibrio(raiz) << ")\"];\n";
@@ -159,6 +194,10 @@ void generarGrafo(Nodo* raiz, ofstream& archivo) {
     }
 }
 
+/*
+    Lee números enteros válidos desde la entrada
+    Retorna un número entero válido ingresado por el usuario
+*/
 int leerEntero() {
     int valor;
     while (true) {
@@ -173,6 +212,9 @@ int leerEntero() {
     }
 }
 
+/*
+    Imprime los nodos del árbol en orden ascendente
+*/
 void imprimirEnOrden(Nodo* raiz) {
     if (raiz != nullptr) {
         imprimirEnOrden(raiz->izquierdo);
